@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "Sacred Direction",
+    "slug": "compass",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#160B1F"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourname.sacreddirection",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs your location to calculate the direction and distance to the sacred point.",
+        "UIBackgroundModes": [],
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#160B1F"
+      },
+      "package": "com.yourname.sacreddirection",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "This app needs your location to calculate the direction and distance to the sacred point."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9ca8ea2f-30a7-4362-a2ce-b69474eb7cb9"
+      }
+    },
+    "owner": "hardikkumar1702s-team"
+  }
+}
