@@ -80,23 +80,6 @@ export async function schedulePrayerNotification({ hour, minute, title, body }) 
   }
 }
 
-// Temporary debug helper — fires almost immediately on the same channel so
-// the custom sound can be tested from the foreground without waiting for a
-// real scheduled reminder. Safe to remove once sound issues are resolved.
-export async function sendTestNotification() {
-  if (!Notifications) return null;
-  try {
-    const granted = await ensureNotificationPermission();
-    if (!granted) return null;
-    return await Notifications.scheduleNotificationAsync({
-      content: { title: 'Test notification', body: 'Custom sound check', sound: NOTIFICATION_SOUND },
-      trigger: { seconds: 2, channelId: CHANNEL_ID },
-    });
-  } catch (e) {
-    return null;
-  }
-}
-
 export async function cancelPrayerNotification(notificationId) {
   if (!Notifications || !notificationId) return;
   try {

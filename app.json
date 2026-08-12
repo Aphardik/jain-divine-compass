@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourname.sacreddirection",
+      "bundleIdentifier": "com.adhyatmparivar.sacreddirection",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs your location to calculate the direction and distance to the sacred point.",
         "UIBackgroundModes": [],
@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#160B1F"
       },
-      "package": "com.yourname.sacreddirection",
+      "package": "com.adhyatmparivar.sacreddirection",
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",

@@ -14,7 +14,6 @@ export default function SettingsModal({
   onTogglePrayerTime,
   onRemovePrayerTime,
   onAddPrayerTime,
-  onTestNotification,
   colors,
   styles,
   t,
@@ -58,12 +57,6 @@ export default function SettingsModal({
             ))}
             <TouchableOpacity style={styles.addPrayerBtn} onPress={onAddPrayerTime}>
               <Text style={styles.addPrayerBtnText}>{t('addPrayerTime')}</Text>
-            </TouchableOpacity>
-
-            {/* Temporary debug aid — fires a test notification in ~2s to
-                check the custom sound without waiting for a real reminder. */}
-            <TouchableOpacity style={styles.addPrayerBtn} onPress={onTestNotification}>
-              <Text style={styles.addPrayerBtnText}>Test Notification Sound</Text>
             </TouchableOpacity>
 
             <Text style={styles.settingLabel}>{t('language')}</Text>
