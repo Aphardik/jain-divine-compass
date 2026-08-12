@@ -21,6 +21,7 @@ import {
   cancelPrayerNotification,
   ensureNotificationPermission,
   schedulePrayerNotification,
+  sendTestNotification,
 } from './src/notifications';
 
 import CompassDial from './src/components/CompassDial';
@@ -428,6 +429,7 @@ export default function App() {
         onTogglePrayerTime={handleTogglePrayerTime}
         onRemovePrayerTime={handleRemovePrayerTime}
         onAddPrayerTime={handleAddPrayerTime}
+        onTestNotification={sendTestNotification}
         colors={c}
         styles={styles}
         t={t}

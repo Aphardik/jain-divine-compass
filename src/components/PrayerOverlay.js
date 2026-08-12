@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ImageBackground, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { translate } from '../i18n';
 
 const TIRTH_IMAGE = require('../../assets/tirth.jpeg');
+const PRAYER_TUNE = require('../../assets/sounds/serenity.mp3');
+
+// Optional prayer tune — degrade gracefully (overlay still works silently)
+// if the module isn't available, same pattern as Haptics/Notifications in
+// this app.
+let Audio = null;
+try {
+  // eslint-disable-next-line global-require
+  Audio = require('expo-av').Audio;
+} catch (e) {
+  Audio = null;
+}
 
 // Full-screen prayer reveal — shown once the compass aligns with the chosen
 // tirth. The compass view is replaced entirely (rather than a translucent
@@ -20,6 +32,46 @@ export default function PrayerOverlay({
 }) {
   const verseLines = praiseVerse && (praiseVerse.lines[language] || praiseVerse.lines.en);
   const verseTitle = praiseVerse && (praiseVerse.title[language] || praiseVerse.title.en);
+  const soundRef = useRef(null);
+
+  // Plays the tune for as long as the overlay is visible; stops and
+  // unloads it the moment `visible` flips to false (✕ button, Android back
+  // button via onRequestClose, or unmount).
+  useEffect(() => {
+    if (!Audio) return undefined;
+    let cancelled = false;
+
+    async function stop() {
+      const sound = soundRef.current;
+      soundRef.current = null;
+      if (sound) {
+        try {
+          await sound.unloadAsync();
+        } catch (e) {}
+      }
+    }
+
+    if (visible) {
+      (async () => {
+        try {
+          const { sound } = await Audio.Sound.createAsync(PRAYER_TUNE);
+          if (cancelled) {
+            await sound.unloadAsync();
+            return;
+          }
+          soundRef.current = sound;
+          await sound.playAsync();
+        } catch (e) {}
+      })();
+    } else {
+      stop();
+    }
+
+    return () => {
+      cancelled = true;
+      stop();
+    };
+  }, [visible]);
 
   return (
     <Modal visible={visible} animationType="fade" transparent={false} onRequestClose={onClose}>
