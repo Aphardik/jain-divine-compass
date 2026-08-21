@@ -26,13 +26,20 @@ export default function TimePickerModal({
   const [minute, setMinute] = useState(initialMinute);
   const [days, setDays] = useState(initialDays.length ? initialDays : DAYS.map((d) => d.key));
 
+  // Re-sync only when the modal transitions to visible (i.e. it was just
+  // opened) — NOT on every change of initialDays/initialHour/initialMinute.
+  // App.js passes `initialDays={editingEntry ? editingEntry.days : []}`,
+  // a brand-new `[]` on every render; App re-renders continuously while the
+  // compass heading updates, so depending on initialDays here reset the
+  // user's in-progress day selection back to "every day" mid-edit.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (visible) {
       setHour(initialHour);
       setMinute(initialMinute);
       setDays(initialDays.length ? initialDays : DAYS.map((d) => d.key));
     }
-  }, [visible, initialHour, initialMinute, initialDays]);
+  }, [visible]);
 
   const stepHour = (delta) => setHour((h) => (h + delta + 24) % 24);
   const stepMinute = (delta) => setMinute((m) => (m + delta + 60) % 60);
