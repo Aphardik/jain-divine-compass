@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Easing, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -29,9 +29,7 @@ import SettingsModal from './src/components/SettingsModal';
 import TimePickerModal from './src/components/TimePickerModal';
 import MilestoneSheet from './src/components/MilestoneSheet';
 import PrayerOverlay from './src/components/PrayerOverlay';
-
-// This build is dedicated to a single tirth (Shatrunjaya) — see src/tirths.js.
-const TARGET = TIRTHS[0];
+import TirthPickerModal from './src/components/TirthPickerModal';
 
 // Optional haptics — degrade gracefully if the module isn't installed.
 let Haptics = null;
@@ -46,8 +44,29 @@ const { width } = Dimensions.get('window');
 const DIAL_SIZE = Math.min(width * 0.86, 360);
 
 const DEFAULT_PRAYER_TIMES = [
-  { id: 'default-morning', hour: 7, minute: 0, enabled: true, notificationId: null },
+  { id: 'default-morning', hour: 7, minute: 0, enabled: true, days: [], notificationIds: [] },
 ];
+
+// Converts a saved prayer-time entry (possibly from an older app version) to
+// the current shape: `days` (array of 0=Sun…6=Sat, empty = every day) and
+// `notificationIds` (array — a day-restricted reminder holds one id per day).
+function normalizePrayerTime(entry) {
+  return {
+    ...entry,
+    days: Array.isArray(entry.days) ? entry.days : [],
+    notificationIds: Array.isArray(entry.notificationIds)
+      ? entry.notificationIds
+      : entry.notificationId
+      ? [entry.notificationId]
+      : [],
+  };
+}
+
+// expo-notifications' calendar trigger wants weekday as 1-7 (Sunday=1);
+// DAYS[].key here is 0-6 (Sunday=0) to match JS `Date.getDay()`.
+function toExpoWeekdays(days) {
+  return days && days.length ? days.map((d) => d + 1) : undefined;
+}
 
 export default function App() {
   const [booted, setBooted] = useState(false);
@@ -61,7 +80,9 @@ export default function App() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [ready, setReady] = useState(false);
   const [accuracy, setAccuracy] = useState(null);
-  const target = TARGET;
+  const [selectedTirthId, setSelectedTirthId] = useState(TIRTHS[0].id);
+  const [tirthPickerVisible, setTirthPickerVisible] = useState(false);
+  const target = TIRTHS.find((tt) => tt.id === selectedTirthId) || TIRTHS[0];
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Prayer-time reminders (Settings) + the milestone/anniversary banner.
@@ -69,6 +90,7 @@ export default function App() {
   const [dismissedMilestones, setDismissedMilestones] = useState({});
   const [milestoneVisible, setMilestoneVisible] = useState(false);
   const [timePickerVisible, setTimePickerVisible] = useState(false);
+  const [editingPrayerId, setEditingPrayerId] = useState(null);
 
   // Full-screen Navkar Mantra reveal, shown once the compass aligns.
   const [prayerOverlayVisible, setPrayerOverlayVisible] = useState(false);
@@ -90,12 +112,16 @@ export default function App() {
       try {
         const savedLang = await getString(STORAGE_KEYS.LANGUAGE);
         const savedTheme = await getString(STORAGE_KEYS.THEME);
+        const savedTirthId = await getString(STORAGE_KEYS.SELECTED_TIRTH);
         const savedPrayerTimes = await getJSON(STORAGE_KEYS.PRAYER_TIMES, null);
         const savedDismissed = await getJSON(STORAGE_KEYS.DISMISSED_MILESTONES, {});
         if (savedLang) setLanguage(savedLang);
         if (savedTheme) setTheme(savedTheme);
+        if (savedTirthId && TIRTHS.some((tt) => tt.id === savedTirthId)) {
+          setSelectedTirthId(savedTirthId);
+        }
         if (savedPrayerTimes) {
-          setPrayerTimes(savedPrayerTimes);
+          setPrayerTimes(savedPrayerTimes.map(normalizePrayerTime));
         } else {
           setJSON(STORAGE_KEYS.PRAYER_TIMES, DEFAULT_PRAYER_TIMES);
         }
@@ -140,15 +166,21 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booted]);
 
-  // Show the tirth's anniversary/milestone banner once, the first time the
-  // app is opened after install.
+  // Show the tirth's anniversary/milestone banner once per tirth (the first
+  // time it's opened after install, or the first time it's switched to).
   useEffect(() => {
     if (!booted) return;
     if (target.milestone && !dismissedMilestones[target.milestone.id]) {
       setMilestoneVisible(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [booted]);
+  }, [booted, selectedTirthId]);
+
+  async function chooseTirth(id) {
+    setSelectedTirthId(id);
+    await setString(STORAGE_KEYS.SELECTED_TIRTH, id);
+    setTirthPickerVisible(false);
+  }
 
   const bearing = location
     ? calculateBearing(location.latitude, location.longitude, target.latitude, target.longitude)
@@ -225,22 +257,48 @@ export default function App() {
   }
 
   async function handleAddPrayerTime() {
+    setEditingPrayerId(null);
     setTimePickerVisible(true);
   }
 
-  async function handleSavePrayerTime(hour, minute) {
-    const granted = await ensureNotificationPermission();
-    let notificationId = null;
-    if (granted) {
-      notificationId = await schedulePrayerNotification({
-        hour,
-        minute,
-        title: t('prayerNotifTitle'),
-        body: t('prayerNotifBody'),
-      });
+  function handleEditPrayerTime(entry) {
+    setEditingPrayerId(entry.id);
+    setTimePickerVisible(true);
+  }
+
+  async function handleSavePrayerTime(hour, minute, days) {
+    const existing = editingPrayerId && prayerTimes.find((p) => p.id === editingPrayerId);
+    // Re-scheduling an existing (enabled) reminder: drop its old triggers
+    // first so changing the time/days doesn't leave stale duplicates firing.
+    if (existing && existing.enabled) {
+      await cancelPrayerNotification(existing.notificationIds);
     }
-    const id = `${Date.now()}`;
-    updatePrayerTimes([...prayerTimes, { id, hour, minute, enabled: true, notificationId }]);
+    const enabled = existing ? existing.enabled : true;
+    let notificationIds = [];
+    if (enabled) {
+      const granted = await ensureNotificationPermission();
+      if (granted) {
+        notificationIds =
+          (await schedulePrayerNotification({
+            hour,
+            minute,
+            weekdays: toExpoWeekdays(days),
+            title: t('prayerNotifTitle'),
+            body: t('prayerNotifBody'),
+          })) || [];
+      }
+    }
+    if (existing) {
+      updatePrayerTimes(
+        prayerTimes.map((p) =>
+          p.id === existing.id ? { ...p, hour, minute, days, notificationIds } : p
+        )
+      );
+    } else {
+      const id = `${Date.now()}`;
+      updatePrayerTimes([...prayerTimes, { id, hour, minute, enabled: true, days, notificationIds }]);
+    }
+    setEditingPrayerId(null);
     setTimePickerVisible(false);
   }
 
@@ -248,29 +306,30 @@ export default function App() {
     const entry = prayerTimes.find((p) => p.id === id);
     if (!entry) return;
     if (entry.enabled) {
-      await cancelPrayerNotification(entry.notificationId);
+      await cancelPrayerNotification(entry.notificationIds);
       updatePrayerTimes(
-        prayerTimes.map((p) => (p.id === id ? { ...p, enabled: false, notificationId: null } : p))
+        prayerTimes.map((p) => (p.id === id ? { ...p, enabled: false, notificationIds: [] } : p))
       );
     } else {
       const granted = await ensureNotificationPermission();
-      const notificationId = granted
-        ? await schedulePrayerNotification({
+      const notificationIds = granted
+        ? (await schedulePrayerNotification({
             hour: entry.hour,
             minute: entry.minute,
+            weekdays: toExpoWeekdays(entry.days),
             title: t('prayerNotifTitle'),
             body: t('prayerNotifBody'),
-          })
-        : null;
+          })) || []
+        : [];
       updatePrayerTimes(
-        prayerTimes.map((p) => (p.id === id ? { ...p, enabled: true, notificationId } : p))
+        prayerTimes.map((p) => (p.id === id ? { ...p, enabled: true, notificationIds } : p))
       );
     }
   }
 
   async function handleRemovePrayerTime(id) {
     const entry = prayerTimes.find((p) => p.id === id);
-    if (entry && entry.enabled) await cancelPrayerNotification(entry.notificationId);
+    if (entry && entry.enabled) await cancelPrayerNotification(entry.notificationIds);
     updatePrayerTimes(prayerTimes.filter((p) => p.id !== id));
   }
 
@@ -295,6 +354,8 @@ export default function App() {
     return <LinearGradient colors={c.gradient} style={styles.container} />;
   }
 
+  const editingEntry = editingPrayerId ? prayerTimes.find((p) => p.id === editingPrayerId) : null;
+
   const nm = target.name[language] || target.name.en;
   const place = (target.place && (target.place[language] || target.place.en)) || '';
   const rg = REGIONS[target.region][language] || REGIONS[target.region].en;
@@ -302,6 +363,8 @@ export default function App() {
   return (
     <LinearGradient colors={c.gradient} style={styles.container}>
       <StatusBar style={c.isDark ? 'light' : 'dark'} />
+
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
       {/* Top bar */}
       <View style={styles.topBar}>
@@ -320,11 +383,16 @@ export default function App() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.eyebrow}>✦  {t('pranam')}  ✦</Text>
-        <View style={styles.tirthCard}>
+        <TouchableOpacity
+          style={styles.tirthCard}
+          activeOpacity={0.7}
+          onPress={() => setTirthPickerVisible(true)}
+        >
           <Text style={styles.tirthName} numberOfLines={1}>
             {nm}
           </Text>
-        </View>
+          <Text style={styles.tirthCardChevron}>▾</Text>
+        </TouchableOpacity>
         {!!place && (
           <Text style={styles.placeLine}>
             {place} · {rg}
@@ -417,6 +485,19 @@ export default function App() {
 
       <Text style={styles.footerNote}>{t('footer')}</Text>
 
+      </ScrollView>
+
+      <TirthPickerModal
+        visible={tirthPickerVisible}
+        tirths={TIRTHS}
+        selectedId={selectedTirthId}
+        language={language}
+        onSelect={chooseTirth}
+        onClose={() => setTirthPickerVisible(false)}
+        styles={styles}
+        t={t}
+      />
+
       <SettingsModal
         visible={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -428,6 +509,7 @@ export default function App() {
         onTogglePrayerTime={handleTogglePrayerTime}
         onRemovePrayerTime={handleRemovePrayerTime}
         onAddPrayerTime={handleAddPrayerTime}
+        onEditPrayerTime={handleEditPrayerTime}
         colors={c}
         styles={styles}
         t={t}
@@ -446,12 +528,17 @@ export default function App() {
 
       <TimePickerModal
         visible={timePickerVisible}
-        initialHour={7}
-        initialMinute={0}
-        onCancel={() => setTimePickerVisible(false)}
+        initialHour={editingEntry ? editingEntry.hour : 7}
+        initialMinute={editingEntry ? editingEntry.minute : 0}
+        initialDays={editingEntry ? editingEntry.days : []}
+        onCancel={() => {
+          setEditingPrayerId(null);
+          setTimePickerVisible(false);
+        }}
         onSave={handleSavePrayerTime}
         styles={styles}
         t={t}
+        language={language}
       />
 
       <PrayerOverlay

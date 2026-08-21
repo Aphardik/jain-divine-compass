@@ -1,7 +1,17 @@
 import React from 'react';
 import { Modal, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
-import { LANGUAGES } from '../i18n';
+import { DAYS, LANGUAGES } from '../i18n';
 import { formatTime12h } from '../geo';
+
+function daysLabel(days, language, t) {
+  if (!days || days.length === 0 || days.length === 7) return t('daily');
+  return days
+    .map((key) => {
+      const d = DAYS.find((x) => x.key === key);
+      return d ? d.short[language] || d.short.en : '';
+    })
+    .join(', ');
+}
 
 export default function SettingsModal({
   visible,
@@ -14,6 +24,7 @@ export default function SettingsModal({
   onTogglePrayerTime,
   onRemovePrayerTime,
   onAddPrayerTime,
+  onEditPrayerTime,
   colors,
   styles,
   t,
@@ -33,10 +44,18 @@ export default function SettingsModal({
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.settingLabel}>{t('prayerTimes')}</Text>
             {prayerTimes.map((entry) => (
-              <View key={entry.id} style={styles.prayerRow}>
-                <Text style={styles.prayerRowTime}>
-                  {formatTime12h(entry.hour, entry.minute)}
-                </Text>
+              <TouchableOpacity
+                key={entry.id}
+                style={styles.prayerRow}
+                activeOpacity={0.7}
+                onPress={() => onEditPrayerTime && onEditPrayerTime(entry)}
+              >
+                <View>
+                  <Text style={styles.prayerRowTime}>
+                    {formatTime12h(entry.hour, entry.minute)}
+                  </Text>
+                  <Text style={styles.prayerRowDays}>{daysLabel(entry.days, language, t)}</Text>
+                </View>
                 <View style={styles.prayerRowActions}>
                   <Switch
                     value={entry.enabled}
@@ -53,7 +72,7 @@ export default function SettingsModal({
                     <Text style={styles.prayerRowRemoveIcon}>✕</Text>
                   </TouchableOpacity>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
             <TouchableOpacity style={styles.addPrayerBtn} onPress={onAddPrayerTime}>
               <Text style={styles.addPrayerBtnText}>{t('addPrayerTime')}</Text>
