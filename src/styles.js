@@ -329,6 +329,13 @@ export function makeStyles(c) {
       borderWidth: 1,
       borderColor: c.cardBorder,
     },
+    milestoneTirthName: {
+      color: c.gold,
+      fontSize: 15,
+      fontWeight: '700',
+      textAlign: 'center',
+      marginBottom: 4,
+    },
     milestoneTitle: {
       color: c.goldBright,
       fontSize: 20,
@@ -343,6 +350,7 @@ export function makeStyles(c) {
       textAlign: 'center',
       marginBottom: 22,
     },
+    milestoneDivider: { height: 1, backgroundColor: c.divider, marginBottom: 18 },
     milestoneActions: { flexDirection: 'row', gap: 12, marginBottom: 8 },
     milestoneNoBtn: {
       flex: 1,

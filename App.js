@@ -43,6 +43,7 @@ try {
 const { width } = Dimensions.get('window');
 const DIAL_SIZE = Math.min(width * 0.86, 360);
 const NO_DAYS = [];
+const MILESTONES_INTRO_ID = 'all-tirths-intro';
 
 const DEFAULT_PRAYER_TIMES = [
   { id: 'default-morning', hour: 7, minute: 0, enabled: true, days: [], notificationIds: [] },
@@ -167,15 +168,15 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booted]);
 
-  // Show the tirth's anniversary/milestone banner once per tirth (the first
-  // time it's opened after install, or the first time it's switched to).
+  // Show the combined anniversary/milestone banner (all tirths together)
+  // once, the first time the app is opened after install.
   useEffect(() => {
     if (!booted) return;
-    if (target.milestone && !dismissedMilestones[target.milestone.id]) {
+    if (!dismissedMilestones[MILESTONES_INTRO_ID]) {
       setMilestoneVisible(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [booted, selectedTirthId]);
+  }, [booted]);
 
   async function chooseTirth(id) {
     setSelectedTirthId(id);
@@ -341,12 +342,12 @@ export default function App() {
   }
 
   function handleMilestoneDecline() {
-    if (target.milestone) markMilestoneDismissed(target.milestone.id);
+    markMilestoneDismissed(MILESTONES_INTRO_ID);
     setMilestoneVisible(false);
   }
 
   function handleMilestoneAccept() {
-    if (target.milestone) markMilestoneDismissed(target.milestone.id);
+    markMilestoneDismissed(MILESTONES_INTRO_ID);
     setMilestoneVisible(false);
     setTimePickerVisible(true);
   }
@@ -518,7 +519,7 @@ export default function App() {
 
       <MilestoneSheet
         visible={milestoneVisible}
-        tirth={target}
+        tirths={TIRTHS}
         language={language}
         colors={c}
         styles={styles}
