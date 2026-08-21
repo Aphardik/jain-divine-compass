@@ -64,6 +64,21 @@ export const TIRTHS = [
     // Neminath Temple, Girnar hill.
     latitude: 21.524722,
     longitude: 70.4625,
+    // Anniversary/milestone banner — see the CamScanner PDF reference: Shri
+    // Girnar Mahatirth, 600th Salgira (Samvat-dated).
+    milestone: {
+      id: 'girnar-600',
+      title: {
+        en: '600th Anniversary Occasion',
+        hi: '६००वीं सालगिरा का अवसर',
+        gu: '૬૦૦મી સાલગિરાનો અવસર',
+      },
+      message: {
+        en: 'On the occasion of the upcoming 600th anniversary (Mahotsav) of Girnar Maha Tirth, let us pray facing the tirth with the wish that its glory spreads throughout the world. Would you like to set a reminder?',
+        hi: 'गिरनार महातीर्थ की आ रही ६००वीं वर्षगांठ (महोत्सव) के उपलक्ष्य में, तीर्थ का प्रभाव समस्त विश्व में व्याप्त हो ऐसे भाव से तीर्थ के सन्मुख प्रार्थना करें। क्या आप रिमाइंडर सेट करना चाहते हैं?',
+        gu: 'ગિરનાર મહાતીર્થની આવી રહેલી ૬૦૦મી વર્ષગાંઠ (મહોત્સવ)ના ઉપલક્ષ્યમાં તીર્થનો પ્રભાવ સમસ્ત વિશ્વમાં વ્યાપે એવા ભાવથી તીર્થ સન્મુખ પ્રાર્થના કરીએ. શું તમે રિમાઇન્ડર સેટ કરવા માંગો છો?',
+      },
+    },
   },
   {
     id: 'shree-abu',
@@ -73,5 +88,20 @@ export const TIRTHS = [
     // Dilwara Jain Temples, Mount Abu.
     latitude: 24.6178,
     longitude: 72.7128,
+    // Anniversary/milestone banner — see the CamScanner PDF reference: Shri
+    // Abu Mahatirth, 900th Salgira (Samvat-dated).
+    milestone: {
+      id: 'shree-abu-900',
+      title: {
+        en: '900th Anniversary Occasion',
+        hi: '९००वीं सालगिरा का अवसर',
+        gu: '૯૦૦મી સાલગિરાનો અવસર',
+      },
+      message: {
+        en: 'On the occasion of the upcoming 900th anniversary (Mahotsav) of Shree Abu Maha Tirth, let us pray facing the tirth with the wish that its glory spreads throughout the world. Would you like to set a reminder?',
+        hi: 'श्री आबू महातीर्थ की आ रही ९००वीं वर्षगांठ (महोत्सव) के उपलक्ष्य में, तीर्थ का प्रभाव समस्त विश्व में व्याप्त हो ऐसे भाव से तीर्थ के सन्मुख प्रार्थना करें। क्या आप रिमाइंडर सेट करना चाहते हैं?',
+        gu: 'શ્રી આબુ મહાતીર્થની આવી રહેલી ૯૦૦મી વર્ષગાંઠ (મહોત્સવ)ના ઉપલક્ષ્યમાં તીર્થનો પ્રભાવ સમસ્ત વિશ્વમાં વ્યાપે એવા ભાવથી તીર્થ સન્મુખ પ્રાર્થના કરીએ. શું તમે રિમાઇન્ડર સેટ કરવા માંગો છો?',
+      },
+    },
   },
 ];

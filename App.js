@@ -42,6 +42,7 @@ try {
 
 const { width } = Dimensions.get('window');
 const DIAL_SIZE = Math.min(width * 0.86, 360);
+const NO_DAYS = [];
 
 const DEFAULT_PRAYER_TIMES = [
   { id: 'default-morning', hour: 7, minute: 0, enabled: true, days: [], notificationIds: [] },
@@ -530,7 +531,7 @@ export default function App() {
         visible={timePickerVisible}
         initialHour={editingEntry ? editingEntry.hour : 7}
         initialMinute={editingEntry ? editingEntry.minute : 0}
-        initialDays={editingEntry ? editingEntry.days : []}
+        initialDays={editingEntry ? editingEntry.days : NO_DAYS}
         onCancel={() => {
           setEditingPrayerId(null);
           setTimePickerVisible(false);
