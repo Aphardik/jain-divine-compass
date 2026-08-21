@@ -100,7 +100,6 @@ export default function CompassDial({ size, bearing, aligned, colors }) {
             fontWeight="bold"
             fill={color}
             textAnchor="middle"
-            transform={`rotate(${angle}, ${x}, ${y})`}
           >
             {label}
           </SvgText>

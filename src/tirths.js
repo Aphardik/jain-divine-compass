@@ -1,8 +1,10 @@
 // ---------------------------------------------------------------------------
-// JAIN TIRTH STHAL — this app is dedicated to Shatrunjaya (Palitana) only.
-// Coordinates are of the main temple / sanctum.
-// `place` is the nearest town/city, shown under the tirth name as
-// "<place> · <region>" (see shatrunjay.pdf reference header).
+// JAIN TIRTH STHAL — the compass points at whichever entry the user picks
+// from the tirth dropdown (see App.js `selectedTirthId`), defaulting to the
+// first entry. Coordinates are of the main temple / sanctum. `place` is the
+// nearest town/city, shown under the tirth name as "<place> · <region>"
+// (see shatrunjay.pdf reference header). `place`/`milestone`/`praiseVerse`
+// are all optional per tirth.
 // ---------------------------------------------------------------------------
 export const TIRTHS = [
   {
@@ -53,5 +55,23 @@ export const TIRTHS = [
         ],
       },
     },
+  },
+  {
+    id: 'girnar',
+    name: { en: 'Girnar Tirth', hi: 'गिरनार तीर्थ', gu: 'ગિરનાર તીર્થ' },
+    place: { en: 'Junagadh', hi: 'जूनागढ़', gu: 'જૂનાગઢ' },
+    region: 'gujarat',
+    // Neminath Temple, Girnar hill.
+    latitude: 21.524722,
+    longitude: 70.4625,
+  },
+  {
+    id: 'shree-abu',
+    name: { en: 'Shree Abu Tirth', hi: 'श्री आबू तीर्थ', gu: 'શ્રી આબુ તીર્થ' },
+    place: { en: 'Mount Abu', hi: 'माउंट आबू', gu: 'માઉન્ટ આબુ' },
+    region: 'rajasthan',
+    // Dilwara Jain Temples, Mount Abu.
+    latitude: 24.6178,
+    longitude: 72.7128,
   },
 ];

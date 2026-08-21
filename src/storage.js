@@ -19,6 +19,7 @@ export const STORAGE_KEYS = {
   THEME: 'spiritual.theme',
   PRAYER_TIMES: 'spiritual.prayerTimes',
   DISMISSED_MILESTONES: 'spiritual.dismissedMilestones',
+  SELECTED_TIRTH: 'spiritual.selectedTirth',
 };
 
 export async function getString(key) {

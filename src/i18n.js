@@ -11,12 +11,28 @@ export const LANGUAGES = [
 export const DEFAULT_LANGUAGE = 'hi';
 
 // ---------------------------------------------------------------------------
-// REGION name (localised) — only Gujarat needed now the app is dedicated to
-// Shatrunjaya (Palitana).
+// REGION name (localised), keyed by the `region` field on each entry in
+// src/tirths.js.
 // ---------------------------------------------------------------------------
 export const REGIONS = {
   gujarat: { en: 'Gujarat', hi: 'गुजरात', gu: 'ગુજરાત' },
+  rajasthan: { en: 'Rajasthan', hi: 'राजस्थान', gu: 'રાજસ્થાન' },
 };
+
+// ---------------------------------------------------------------------------
+// WEEKDAYS — `key` matches JS `Date.getDay()` (0=Sunday…6=Saturday). Used by
+// the prayer-time day picker; expo-notifications' calendar trigger wants
+// 1-7 (Sunday=1), so callers should pass `key + 1`.
+// ---------------------------------------------------------------------------
+export const DAYS = [
+  { key: 0, short: { en: 'Sun', hi: 'रवि', gu: 'રવિ' } },
+  { key: 1, short: { en: 'Mon', hi: 'सोम', gu: 'સોમ' } },
+  { key: 2, short: { en: 'Tue', hi: 'मंगल', gu: 'મંગળ' } },
+  { key: 3, short: { en: 'Wed', hi: 'बुध', gu: 'બુધ' } },
+  { key: 4, short: { en: 'Thu', hi: 'गुरु', gu: 'ગુરુ' } },
+  { key: 5, short: { en: 'Fri', hi: 'शुक्र', gu: 'શુક્ર' } },
+  { key: 6, short: { en: 'Sat', hi: 'शनि', gu: 'શનિ' } },
+];
 
 // ---------------------------------------------------------------------------
 // TRANSLATIONS
@@ -58,9 +74,13 @@ export const STRINGS = {
     prayerNotifTitle: 'Sacred Direction',
     prayerNotifBody: 'It’s time for prayer 🙏',
     notifPermission: 'Enable notifications in Settings to get prayer-time reminders.',
+    selectDays: 'Repeat on',
+    daily: 'Daily',
     // Milestone / anniversary
     yes: 'Yes',
     no: 'No',
+    // Tirth picker
+    chooseTirth: 'Choose tirth',
   },
   hi: {
     tagline: 'तीर्थ दिशा',
@@ -96,8 +116,11 @@ export const STRINGS = {
     prayerNotifTitle: 'तीर्थ दिशा',
     prayerNotifBody: 'प्रार्थना का समय हो गया है 🙏',
     notifPermission: 'प्रार्थना समय की सूचना पाने हेतु सेटिंग्स में नोटिफिकेशन चालू करें।',
+    selectDays: 'दोहराएँ',
+    daily: 'प्रतिदिन',
     yes: 'हाँ',
     no: 'नहीं',
+    chooseTirth: 'तीर्थ चुनें',
   },
   gu: {
     tagline: 'તીર્થ દિશા',
@@ -133,8 +156,11 @@ export const STRINGS = {
     prayerNotifTitle: 'તીર્થ દિશા',
     prayerNotifBody: 'પ્રાર્થનાનો સમય થયો છે 🙏',
     notifPermission: 'પ્રાર્થના સમયની સૂચના મેળવવા સેટિંગ્સમાં નોટિફિકેશન ચાલુ કરો.',
+    selectDays: 'પુનરાવર્તન',
+    daily: 'રોજ',
     yes: 'હા',
     no: 'ના',
+    chooseTirth: 'તીર્થ પસંદ કરો',
   },
 };
 

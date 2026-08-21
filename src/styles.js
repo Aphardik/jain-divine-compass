@@ -4,6 +4,9 @@ export function makeStyles(c) {
   return StyleSheet.create({
     container: {
       flex: 1,
+    },
+    scrollContent: {
+      flexGrow: 1,
       alignItems: 'center',
       justifyContent: 'flex-start',
       paddingTop: Platform.OS === 'ios' ? 60 : 38,
@@ -43,6 +46,7 @@ export function makeStyles(c) {
       maxWidth: '100%',
     },
     tirthName: { color: c.text, fontSize: 21, fontWeight: '700', letterSpacing: 0.5 },
+    tirthCardChevron: { color: c.gold, fontSize: 14, marginLeft: 8, marginTop: 2 },
     placeLine: { color: c.goldBright, fontSize: 13, fontWeight: '600', marginTop: 6 },
     coords: { color: c.textMuted, fontSize: 12, marginTop: 8 },
 
@@ -187,6 +191,25 @@ export function makeStyles(c) {
     },
     doneBtnText: { color: c.chipTextOn, fontSize: 16, fontWeight: '700' },
 
+    // Tirth picker
+    tirthOptionRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: c.rowBg,
+      borderWidth: 1,
+      borderColor: c.cardBorder,
+      borderRadius: 16,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      marginBottom: 10,
+    },
+    tirthOptionRowOn: { borderColor: c.gold },
+    tirthOptionName: { color: c.text, fontSize: 16, fontWeight: '700' },
+    tirthOptionNameOn: { color: c.goldBright },
+    tirthOptionPlace: { color: c.textMuted, fontSize: 12, marginTop: 3 },
+    tirthOptionCheck: { color: c.gold, fontSize: 16, fontWeight: '700' },
+
     // Prayer-time reminders (Settings)
     prayerRow: {
       flexDirection: 'row',
@@ -201,6 +224,7 @@ export function makeStyles(c) {
       marginBottom: 10,
     },
     prayerRowTime: { color: c.text, fontSize: 17, fontWeight: '700' },
+    prayerRowDays: { color: c.textMuted, fontSize: 12, marginTop: 3 },
     prayerRowActions: { flexDirection: 'row', alignItems: 'center', gap: 16 },
     prayerRowRemove: { padding: 4 },
     prayerRowRemoveIcon: { color: c.textMuted, fontSize: 16 },
@@ -251,6 +275,26 @@ export function makeStyles(c) {
     stepperIcon: { color: c.gold, fontSize: 14 },
     timePickerValue: { color: c.text, fontSize: 36, fontWeight: '700', marginVertical: 8 },
     timePickerColon: { color: c.text, fontSize: 30, fontWeight: '700', marginTop: 20 },
+    daysRow: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      gap: 8,
+      marginBottom: 22,
+    },
+    dayChip: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: c.chipBg,
+      borderWidth: 1,
+      borderColor: c.chipBorder,
+    },
+    dayChipOn: { backgroundColor: c.gold, borderColor: c.gold },
+    dayChipText: { color: c.textMuted, fontSize: 12, fontWeight: '600' },
+    dayChipTextOn: { color: c.chipTextOn },
     timePickerActions: { flexDirection: 'row', gap: 12 },
     cancelBtn: {
       flex: 1,

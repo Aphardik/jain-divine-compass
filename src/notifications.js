@@ -64,27 +64,47 @@ export async function ensureNotificationPermission() {
   }
 }
 
-// Schedules a daily-repeating local notification at { hour, minute } (24h).
-// Returns the notification id (to cancel later), or null if unavailable.
-export async function schedulePrayerNotification({ hour, minute, title, body }) {
+// Schedules a repeating local notification at { hour, minute } (24h).
+// `weekdays`, if given, is an array of 1-7 (Sunday=1 … Saturday=7, matching
+// expo-notifications' calendar trigger) restricting the reminder to those
+// days — one trigger is scheduled per day since a single trigger can't hold
+// more than one weekday. Omit/empty `weekdays` for a plain daily reminder.
+// Returns an array of notification ids (to cancel later), or null if
+// unavailable.
+export async function schedulePrayerNotification({ hour, minute, title, body, weekdays }) {
   if (!Notifications) return null;
   try {
     const granted = await ensureNotificationPermission();
     if (!granted) return null;
-    return await Notifications.scheduleNotificationAsync({
-      content: { title, body, sound: NOTIFICATION_SOUND },
-      trigger: { hour, minute, repeats: true, channelId: CHANNEL_ID },
-    });
+    const content = { title, body, sound: NOTIFICATION_SOUND };
+    if (!weekdays || weekdays.length === 0) {
+      const id = await Notifications.scheduleNotificationAsync({
+        content,
+        trigger: { hour, minute, repeats: true, channelId: CHANNEL_ID },
+      });
+      return [id];
+    }
+    return await Promise.all(
+      weekdays.map((weekday) =>
+        Notifications.scheduleNotificationAsync({
+          content,
+          trigger: { weekday, hour, minute, repeats: true, channelId: CHANNEL_ID },
+        })
+      )
+    );
   } catch (e) {
     return null;
   }
 }
 
-export async function cancelPrayerNotification(notificationId) {
-  if (!Notifications || !notificationId) return;
-  try {
-    await Notifications.cancelScheduledNotificationAsync(notificationId);
-  } catch (e) {}
+// Accepts a single id or an array of ids (a day-restricted reminder holds
+// one id per selected weekday).
+export async function cancelPrayerNotification(notificationIds) {
+  if (!Notifications || !notificationIds) return;
+  const ids = Array.isArray(notificationIds) ? notificationIds : [notificationIds];
+  await Promise.all(
+    ids.map((id) => Notifications.cancelScheduledNotificationAsync(id).catch(() => {}))
+  );
 }
 
 export function notificationsAvailable() {
