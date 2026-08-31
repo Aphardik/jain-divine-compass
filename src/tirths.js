@@ -3,8 +3,9 @@
 // from the tirth dropdown (see App.js `selectedTirthId`), defaulting to the
 // first entry. Coordinates are of the main temple / sanctum. `place` is the
 // nearest town/city, shown under the tirth name as "<place> · <region>"
-// (see shatrunjay.pdf reference header). `place`/`milestone`/`praiseVerse`
-// are all optional per tirth.
+// (see shatrunjay.pdf reference header). `place`/`praiseVerse` are optional
+// per tirth. See `MILESTONES_INTRO` below for the combined anniversary
+// banner shown once on first launch.
 // ---------------------------------------------------------------------------
 export const TIRTHS = [
   {
@@ -14,21 +15,6 @@ export const TIRTHS = [
     region: 'gujarat',
     latitude: 21.482778,
     longitude: 71.795,
-    // Anniversary / milestone banner shown once when this tirth is opened —
-    // see shatrunjay.pdf reference (500-year Mahotsav reminder prompt).
-    milestone: {
-      id: 'shatrunjaya-500',
-      title: {
-        en: '500th Anniversary Occasion',
-        hi: '५००वीं सालगिरा का अवसर',
-        gu: '૫૦૦મી સાલગિરાનો અવસર',
-      },
-      message: {
-        en: 'On the occasion of the upcoming 500th anniversary of the consecration (Pratishtha) of Dada Adinath at Shatrunjaya Maha Tirth, let us pray facing the tirth with the wish that its glory spreads throughout the world. Would you like to set a reminder?',
-        hi: 'शत्रुंजय महातीर्थ पर दादा आदिनाथ की प्रतिष्ठा की आ रही ५००वीं वर्षगांठ के उपलक्ष्य में, तीर्थ का प्रभाव समस्त विश्व में व्याप्त हो ऐसे भाव से तीर्थ के सन्मुख प्रार्थना करें। क्या आप रिमाइंडर सेट करना चाहते हैं?',
-        gu: 'શત્રુંજય મહાતીર્થ પર દાદા આદિનાથની પ્રતિષ્ઠાની આવી રહેલી ૫૦૦મી વર્ષગાંઠના ઉપલક્ષ્યમાં તીર્થનો પ્રભાવ સમસ્ત વિશ્વમાં વ્યાપે એવા ભાવથી તીર્થ સન્મુખ પ્રાર્થના કરીએ. શું તમે રિમાઇન્ડર સેટ કરવા માંગો છો?',
-      },
-    },
     // Second devotional verse recited after the Navkar Mantra, specific to
     // Shatrunjaya's alternate hill-names (Siddhachal/Vimalachal) — see
     // handwritten addition in the CamScanner annotated PDF.
@@ -64,21 +50,6 @@ export const TIRTHS = [
     // Neminath Temple, Girnar hill.
     latitude: 21.524722,
     longitude: 70.4625,
-    // Anniversary/milestone banner — see the CamScanner PDF reference: Shri
-    // Girnar Mahatirth, 600th Salgira (Samvat-dated).
-    milestone: {
-      id: 'girnar-600',
-      title: {
-        en: '600th Anniversary Occasion',
-        hi: '६००वीं सालगिरा का अवसर',
-        gu: '૬૦૦મી સાલગિરાનો અવસર',
-      },
-      message: {
-        en: 'On the occasion of the upcoming 600th anniversary (Mahotsav) of Girnar Maha Tirth, let us pray facing the tirth with the wish that its glory spreads throughout the world. Would you like to set a reminder?',
-        hi: 'गिरनार महातीर्थ की आ रही ६००वीं वर्षगांठ (महोत्सव) के उपलक्ष्य में, तीर्थ का प्रभाव समस्त विश्व में व्याप्त हो ऐसे भाव से तीर्थ के सन्मुख प्रार्थना करें। क्या आप रिमाइंडर सेट करना चाहते हैं?',
-        gu: 'ગિરનાર મહાતીર્થની આવી રહેલી ૬૦૦મી વર્ષગાંઠ (મહોત્સવ)ના ઉપલક્ષ્યમાં તીર્થનો પ્રભાવ સમસ્ત વિશ્વમાં વ્યાપે એવા ભાવથી તીર્થ સન્મુખ પ્રાર્થના કરીએ. શું તમે રિમાઇન્ડર સેટ કરવા માંગો છો?',
-      },
-    },
   },
   {
     id: 'shree-abu',
@@ -88,20 +59,71 @@ export const TIRTHS = [
     // Dilwara Jain Temples, Mount Abu.
     latitude: 24.6178,
     longitude: 72.7128,
-    // Anniversary/milestone banner — see the CamScanner PDF reference: Shri
-    // Abu Mahatirth, 900th Salgira (Samvat-dated).
-    milestone: {
-      id: 'shree-abu-900',
-      title: {
-        en: '900th Anniversary Occasion',
-        hi: '९००वीं सालगिरा का अवसर',
-        gu: '૯૦૦મી સાલગિરાનો અવસર',
-      },
-      message: {
-        en: 'On the occasion of the upcoming 900th anniversary (Mahotsav) of Shree Abu Maha Tirth, let us pray facing the tirth with the wish that its glory spreads throughout the world. Would you like to set a reminder?',
-        hi: 'श्री आबू महातीर्थ की आ रही ९००वीं वर्षगांठ (महोत्सव) के उपलक्ष्य में, तीर्थ का प्रभाव समस्त विश्व में व्याप्त हो ऐसे भाव से तीर्थ के सन्मुख प्रार्थना करें। क्या आप रिमाइंडर सेट करना चाहते हैं?',
-        gu: 'શ્રી આબુ મહાતીર્થની આવી રહેલી ૯૦૦મી વર્ષગાંઠ (મહોત્સવ)ના ઉપલક્ષ્યમાં તીર્થનો પ્રભાવ સમસ્ત વિશ્વમાં વ્યાપે એવા ભાવથી તીર્થ સન્મુખ પ્રાર્થના કરીએ. શું તમે રિમાઇન્ડર સેટ કરવા માંગો છો?',
-      },
-    },
   },
 ];
+
+// Combined anniversary/milestone banner (shown once, on first app launch —
+// see App.js `MILESTONES_INTRO_ID`), mentioning all three tirths' occasions
+// together. Structured as bullet lists (rather than one prose string) so
+// MilestoneSheet can render each line with its own icon.
+export const MILESTONES_INTRO = {
+  title: {
+    en: 'Our Good Fortune — Witnessing Three Historic Occasions',
+    hi: 'हमारा सौभाग्य, तीन ऐतिहासिक अवसरों के साक्षी बनने का',
+    gu: 'આપણું સૌભાગ્ય, ત્રણ ઐતિહાસિક અવસરોના સાક્ષી બનવાનું',
+  },
+  // Each entry rendered as an icon + text bullet (see MilestoneSheet's
+  // ANNIVERSARY_ICON).
+  anniversaries: [
+    {
+      en: "Shri Shatrunjaya Maha Tirth's 500th anniversary (Vikram Samvat 2087, Vaishakh Vad Chhath)",
+      hi: 'श्री शत्रुंजय महातीर्थ की ५००वीं सालगिरा (वि. सं. २०८७ वैशाख वद छठ)',
+      gu: 'શ્રીશત્રુંજય મહાતીર્થ ૫૦૦મી સાલગિરા (વિ. સં. ૨૦૮૭ વૈશાખ વદ છઠ)',
+    },
+    {
+      en: "Shri Girnar Maha Tirth's 900th anniversary (Vikram Samvat 2085, Vaishakh Sud 15)",
+      hi: 'श्री गिरनार महातीर्थ की ९००वीं सालगिरा (वि. सं. २०८५ वैशाख सुद १५)',
+      gu: 'શ્રીગિરનાર મહાતીર્થ ૯૦૦મી સાલગિરા (વિ. સં. ૨૦૮૫ વૈશાખ સુદ ૧૫)',
+    },
+    {
+      en: "Shri Abu Maha Tirth's 100th anniversary (Vikram Samvat 2088, Jeth Sud 4)",
+      hi: 'श्री आबू महातीर्थ की १००वीं सालगिरा (वि. सं. २०८८ जेठ सुद ४)',
+      gu: 'શ્રીઆબૂ મહાતીર્થ ૧૦૦મી સાલગિરા (વિ. સં. ૨૦૮૮ જેઠ સુદ ૪)',
+    },
+  ],
+  // Plain paragraph, shown between the two bullet groups.
+  prayerNote: {
+    en: 'For these three Maha Tirths, let us pray daily if possible — or at least every Sunday — facing the direction of each tirth for three minutes, so that the glory of the tirth spreads through the three worlds.',
+    hi: 'हम इन तीनों महातीर्थों के लिए, बन सके तो रोज़, न बन सके तो हर रविवार, उस-उस तीर्थ की दिशा में तीन मिनट देकर तीर्थ का प्रभाव तीनों लोक में फैले ऐसी प्रार्थना करें।',
+    gu: 'આપણે આ ત્રણ મહાતીર્થો માટે બની શકે તો રોજ, ન બની શકે તો હર રવિવારે તે-તે તીર્થની દિશામાં ત્રણ મિનિટ આપીને તીર્થનો પ્રભાવ ત્રણ લોકમાં કેલાય તેવી પ્રાર્થના કરીએ.',
+  },
+  // Each entry rendered as an icon + text bullet (see MilestoneSheet's
+  // INSTRUCTION_ICONS, matched by index).
+  instructions: [
+    {
+      en: 'You can set the reminder however you like.',
+      hi: 'आप अपनी इच्छानुसार रिमाइंडर सेट कर सकते हैं।',
+      gu: 'આપ જે પ્રમાણે ઈચ્છો તે પ્રમાણે રિમાઇન્ડર ગોઠવી શકો છો.',
+    },
+    {
+      en: 'At what time each day',
+      hi: 'रोज़ किस समय',
+      gu: 'દરરોજ કયા સમયે',
+    },
+    {
+      en: 'At what time every Sunday (an alarm will sound at the time you set)',
+      hi: 'हर रविवार किस समय (आपके तय किए समय पर अलार्म बजेगा)',
+      gu: 'હર રવિવારે કયા સમયે (આપે ગોઠવેલ સમયે એલાર્મ વાગશે)',
+    },
+    {
+      en: "After that, whichever tirth you tap on, you will see that tirth's direction.",
+      hi: 'इसके बाद आप जिस तीर्थ पर क्लिक करेंगे, क्रमशः उस तीर्थ की दिशा आपको दिखाई देगी।',
+      gu: 'ત્યાર બાદ ક્રમશઃ આપ જે તીર્થ પર ક્લિક કરશો તે તીર્થની દિશા આપને દેખાશે.',
+    },
+    {
+      en: 'Facing that direction, you will be able to offer your prayer.',
+      hi: 'उस दिशा की ओर मुख करके आप अपनी प्रार्थना कर सकेंगे।',
+      gu: 'તે દિશા સન્મુખ રહી આપની પ્રાર્થના આપ કરી શકશો.',
+    },
+  ],
+};

@@ -5,7 +5,7 @@ import * as Location from 'expo-location';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { DEFAULT_LANGUAGE, REGIONS, translate } from './src/i18n';
-import { TIRTHS } from './src/tirths';
+import { MILESTONES_INTRO, TIRTHS } from './src/tirths';
 import { getColors } from './src/theme';
 import { makeStyles } from './src/styles';
 import {
@@ -519,7 +519,7 @@ export default function App() {
 
       <MilestoneSheet
         visible={milestoneVisible}
-        tirths={TIRTHS}
+        intro={MILESTONES_INTRO}
         language={language}
         colors={c}
         styles={styles}

@@ -318,6 +318,9 @@ export function makeStyles(c) {
     timePickerSaveBtnText: { color: c.chipTextOn, fontSize: 16, fontWeight: '700' },
 
     // Milestone / anniversary sheet
+    // react-native-web makes ScrollView focusable/scrollable via a <div>,
+    // which picks up Chrome's default black focus-ring outline — suppress it.
+    milestoneScroll: { outlineStyle: 'none' },
     milestoneIconWrap: { alignItems: 'center', marginBottom: 14 },
     milestoneIconBadge: {
       width: 96,
@@ -328,13 +331,6 @@ export function makeStyles(c) {
       backgroundColor: c.cardBg,
       borderWidth: 1,
       borderColor: c.cardBorder,
-    },
-    milestoneTirthName: {
-      color: c.gold,
-      fontSize: 15,
-      fontWeight: '700',
-      textAlign: 'center',
-      marginBottom: 4,
     },
     milestoneTitle: {
       color: c.goldBright,
@@ -347,10 +343,41 @@ export function makeStyles(c) {
       color: c.text,
       fontSize: 15,
       lineHeight: 22,
-      textAlign: 'center',
-      marginBottom: 22,
+      textAlign: 'left',
+      marginBottom: 18,
     },
-    milestoneDivider: { height: 1, backgroundColor: c.divider, marginBottom: 18 },
+    milestoneBulletGroup: {
+      backgroundColor: c.cardBg,
+      borderWidth: 1,
+      borderColor: c.cardBorder,
+      borderRadius: 16,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      marginBottom: 18,
+      gap: 10,
+    },
+    milestoneBulletRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 6,
+      gap: 10,
+    },
+    milestoneBulletIconWrap: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: c.sheetBg,
+      borderWidth: 1,
+      borderColor: c.cardBorder,
+    },
+    milestoneBulletText: {
+      flex: 1,
+      color: c.text,
+      fontSize: 14,
+      lineHeight: 20,
+    },
     milestoneActions: { flexDirection: 'row', gap: 12, marginBottom: 8 },
     milestoneNoBtn: {
       flex: 1,
