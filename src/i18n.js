@@ -1,6 +1,8 @@
 // ---------------------------------------------------------------------------
-// LANGUAGES — default is Hindi (D: app opens straight into the compass,
-// no first-launch language gate; language is only changed via Settings).
+// LANGUAGES — default is Hindi. A first-launch dialog (see
+// components/LanguageModal.js) prompts for a choice once, the first time the
+// app opens with no language saved yet; after that it's only changed via
+// Settings.
 // ---------------------------------------------------------------------------
 export const LANGUAGES = [
   { code: 'en', native: 'English' },

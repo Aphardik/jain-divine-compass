@@ -30,6 +30,7 @@ import TimePickerModal from './src/components/TimePickerModal';
 import MilestoneSheet from './src/components/MilestoneSheet';
 import PrayerOverlay from './src/components/PrayerOverlay';
 import TirthPickerModal from './src/components/TirthPickerModal';
+import LanguageModal from './src/components/LanguageModal';
 
 // Optional haptics — degrade gracefully if the module isn't installed.
 let Haptics = null;
@@ -72,9 +73,10 @@ function toExpoWeekdays(days) {
 
 export default function App() {
   const [booted, setBooted] = useState(false);
-  // Defaults to Hindi and skips any first-launch chooser — language is only
-  // ever changed from Settings now.
+  // Defaults to Hindi while booting; if no language was ever saved, the
+  // first-launch LanguageModal below prompts for a choice.
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
+  const [languagePickerVisible, setLanguagePickerVisible] = useState(false);
   const [theme, setTheme] = useState('light');
 
   const [heading, setHeading] = useState(0);
@@ -117,7 +119,11 @@ export default function App() {
         const savedTirthId = await getString(STORAGE_KEYS.SELECTED_TIRTH);
         const savedPrayerTimes = await getJSON(STORAGE_KEYS.PRAYER_TIMES, null);
         const savedDismissed = await getJSON(STORAGE_KEYS.DISMISSED_MILESTONES, {});
-        if (savedLang) setLanguage(savedLang);
+        if (savedLang) {
+          setLanguage(savedLang);
+        } else {
+          setLanguagePickerVisible(true);
+        }
         if (savedTheme) setTheme(savedTheme);
         if (savedTirthId && TIRTHS.some((tt) => tt.id === savedTirthId)) {
           setSelectedTirthId(savedTirthId);
@@ -169,14 +175,15 @@ export default function App() {
   }, [booted]);
 
   // Show the combined anniversary/milestone banner (all tirths together)
-  // once, the first time the app is opened after install.
+  // once, the first time the app is opened after install — held back while
+  // the first-launch language dialog is still up so the two never stack.
   useEffect(() => {
-    if (!booted) return;
+    if (!booted || languagePickerVisible) return;
     if (!dismissedMilestones[MILESTONES_INTRO_ID]) {
       setMilestoneVisible(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [booted]);
+  }, [booted, languagePickerVisible]);
 
   async function chooseTirth(id) {
     setSelectedTirthId(id);
@@ -247,6 +254,10 @@ export default function App() {
   async function chooseLanguage(code) {
     setLanguage(code);
     await setString(STORAGE_KEYS.LANGUAGE, code);
+  }
+  async function handleSelectFirstLanguage(code) {
+    await chooseLanguage(code);
+    setLanguagePickerVisible(false);
   }
   async function chooseTheme(next) {
     setTheme(next);
@@ -488,6 +499,13 @@ export default function App() {
       <Text style={styles.footerNote}>{t('footer')}</Text>
 
       </ScrollView>
+
+      <LanguageModal
+        visible={languagePickerVisible}
+        colors={c}
+        styles={styles}
+        onSelect={handleSelectFirstLanguage}
+      />
 
       <TirthPickerModal
         visible={tirthPickerVisible}

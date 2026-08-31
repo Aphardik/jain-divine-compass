@@ -317,6 +317,40 @@ export function makeStyles(c) {
     },
     timePickerSaveBtnText: { color: c.chipTextOn, fontSize: 16, fontWeight: '700' },
 
+    // First-launch language dialog (centered, over a blurred backdrop)
+    languageBackdrop: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 28 },
+    languageCard: {
+      width: '100%',
+      maxWidth: 340,
+      backgroundColor: c.sheetBg,
+      borderRadius: 24,
+      borderWidth: 1,
+      borderColor: c.cardBorder,
+      paddingHorizontal: 22,
+      paddingTop: 22,
+      paddingBottom: 26,
+      alignItems: 'center',
+    },
+    languageTitle: { color: c.goldBright, fontSize: 20, fontWeight: '700', textAlign: 'center' },
+    languageSubtitle: {
+      color: c.textMuted,
+      fontSize: 13,
+      marginTop: 6,
+      marginBottom: 20,
+      textAlign: 'center',
+    },
+    languageOptions: { width: '100%', gap: 10 },
+    languageOptionBtn: {
+      width: '100%',
+      backgroundColor: c.chipBg,
+      borderWidth: 1,
+      borderColor: c.chipBorder,
+      borderRadius: 14,
+      paddingVertical: 15,
+      alignItems: 'center',
+    },
+    languageOptionText: { color: c.text, fontSize: 17, fontWeight: '700' },
+
     // Milestone / anniversary sheet
     // react-native-web makes ScrollView focusable/scrollable via a <div>,
     // which picks up Chrome's default black focus-ring outline — suppress it.
