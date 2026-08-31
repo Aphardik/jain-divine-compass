@@ -76,9 +76,9 @@ export const MILESTONES_INTRO = {
   // ANNIVERSARY_ICON).
   anniversaries: [
     {
-      en: "Shri Shatrunjaya Maha Tirth's 500th anniversary (Vikram Samvat 2087, Vaishakh Vad Chhath)",
-      hi: 'श्री शत्रुंजय महातीर्थ की ५००वीं सालगिरा (वि. सं. २०८७ वैशाख वद छठ)',
-      gu: 'શ્રીશત્રુંજય મહાતીર્થ ૫૦૦મી સાલગિરા (વિ. સં. ૨૦૮૭ વૈશાખ વદ છઠ)',
+      en: "Shri Shatrunjaya Maha Tirth's 500th anniversary (Vikram Samvat 2087, Vaishakh Vad 6)",
+      hi: 'श्री शत्रुंजय महातीर्थ की ५००वीं सालगिरा (वि. सं. २०८७ वैशाख वद ६)',
+      gu: 'શ્રીશત્રુંજય મહાતીર્થ ૫૦૦મી સાલગિરા (વિ. સં. ૨૦૮૭ વૈશાખ વદ ૬)',
     },
     {
       en: "Shri Girnar Maha Tirth's 900th anniversary (Vikram Samvat 2085, Vaishakh Sud 15)",
