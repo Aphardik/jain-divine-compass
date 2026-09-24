@@ -10,7 +10,7 @@
 export const TIRTHS = [
   {
     id: 'shatrunjaya',
-    name: { en: 'Shatrunjaya Tirth', hi: 'शत्रुंजय तीर्थ', gu: 'શત્રુંજય તીર્થ' },
+    name: { en: 'Shree Shatrunjay Tirth', hi: 'श्री शत्रुंजय तीर्थ', gu: 'શ્રી શત્રુંજય તીર્થ' },
     place: { en: 'Palitana', hi: 'पालीताणा', gu: 'પાલીતાણા' },
     region: 'gujarat',
     latitude: 21.482778,
@@ -44,7 +44,7 @@ export const TIRTHS = [
   },
   {
     id: 'girnar',
-    name: { en: 'Girnar Tirth', hi: 'गिरनार तीर्थ', gu: 'ગિરનાર તીર્થ' },
+    name: { en: 'Shree Girnar Tirth', hi: 'श्री गिरनार तीर्थ', gu: 'શ્રી ગિરનાર તીર્થ' },
     place: { en: 'Junagadh', hi: 'जूनागढ़', gu: 'જૂનાગઢ' },
     region: 'gujarat',
     // Neminath Temple, Girnar hill.
@@ -53,7 +53,7 @@ export const TIRTHS = [
   },
   {
     id: 'shree-abu',
-    name: { en: 'Shree Abu Tirth', hi: 'श्री आबू तीर्थ', gu: 'શ્રી આબુ તીર્થ' },
+    name: { en: 'Shree Aabuji Tirth', hi: 'श्री आबूजी तीर्थ', gu: 'શ્રી આબુજી તીર્થ' },
     place: { en: 'Mount Abu', hi: 'माउंट आबू', gu: 'માઉન્ટ આબુ' },
     region: 'rajasthan',
     // Dilwara Jain Temples, Mount Abu.
