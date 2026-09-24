@@ -17,6 +17,7 @@ import {
   shortestDelta,
 } from './src/geo';
 import { STORAGE_KEYS, getJSON, getString, setJSON, setString } from './src/storage';
+import { watchHeading } from './src/heading';
 import {
   cancelPrayerNotification,
   ensureNotificationPermission,
@@ -161,9 +162,9 @@ export default function App() {
         { accuracy: Location.Accuracy.Balanced, timeInterval: 3000, distanceInterval: 5 },
         (loc) => setLocation(loc.coords)
       );
-      headingSub = await Location.watchHeadingAsync((h) => {
-        setHeading(h.trueHeading >= 0 ? h.trueHeading : h.magHeading);
-        if (typeof h.accuracy === 'number') setAccuracy(h.accuracy);
+      headingSub = await watchHeading(({ heading: newHeading, accuracy: newAccuracy }) => {
+        setHeading(newHeading);
+        if (newAccuracy != null) setAccuracy(newAccuracy);
       });
     })();
 
