@@ -7,12 +7,7 @@
 // them on an existing install. Bump this ID (e.g. -v3, -v4) any time those
 // settings change, so Android creates a fresh channel instead of reusing a
 // stale one.
-const CHANNEL_ID = 'prayer-reminders-v3';
-// Must match the basename of the file listed in the expo-notifications
-// plugin's `sounds` array in app.json. Only takes effect in a
-// development/production build — Expo Go always falls back to the OS
-// default sound.
-const NOTIFICATION_SOUND = 'notification.mp3';
+const CHANNEL_ID = 'prayer-reminders-v4';
 
 let Notifications = null;
 try {
@@ -27,25 +22,9 @@ try {
       shouldShowList: true,
     }),
   });
-  // Android ignores shouldPlaySound above unless the notification is posted
-  // to a channel that itself has a sound configured — without this, Android
-  // silently falls back to its auto-created "default" channel (no sound).
-  //
-  // usage: ALARM routes playback through the Alarm audio stream instead of
-  // Notification. Verified via `adb shell dumpsys notification` that the
-  // channel's sound URI was already correctly set to our custom raw
-  // resource, but some OEM notification-management layers (confirmed here:
-  // OxygenOS/ColorOS tags this app's notifications with an internal
-  // groupKey=silent, muting anything on the Notification stream regardless
-  // of channel config) mute the Notification stream for apps they don't
-  // trust yet. The Alarm stream is normally exempt from that throttling.
   Notifications.setNotificationChannelAsync(CHANNEL_ID, {
     name: 'Prayer Reminders',
     importance: Notifications.AndroidImportance.MAX,
-    sound: NOTIFICATION_SOUND,
-    audioAttributes: {
-      usage: Notifications.AndroidAudioUsage.ALARM,
-    },
     vibrationPattern: [0, 250, 250, 250],
   });
 } catch (e) {
@@ -76,7 +55,7 @@ export async function schedulePrayerNotification({ hour, minute, title, body, we
   try {
     const granted = await ensureNotificationPermission();
     if (!granted) return null;
-    const content = { title, body, sound: NOTIFICATION_SOUND };
+    const content = { title, body };
     if (!weekdays || weekdays.length === 0) {
       const id = await Notifications.scheduleNotificationAsync({
         content,
